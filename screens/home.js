@@ -8,7 +8,7 @@ const Home = ({navigation}) => {
   return (
     // <SafeAreaProvider>
     <View>
-      <Text>Home</Text>
+      <Text>Homegfniidfngiodfngiodfngiodn</Text>
     </View>
     // </SafeAreaProvider>
   );
