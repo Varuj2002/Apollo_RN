@@ -1,47 +1,48 @@
 import * as React from 'react';
-import {LogBox, View, Text} from 'react-native';
-
-// import {store, persistor} from 'app/store';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {Provider} from 'react-redux';
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  HttpLink,
-  from,
-} from '@apollo/client';
-import {PersistGate} from 'redux-persist/integration/react';
-
-import Navigator from './navigation/tabs';
-import GetCity from './components/GetCity';
-
-const link = from([new HttpLink({uri: 'https://api.spacex.land/graphql/'})]);
-
-//ERROR TypeError: undefined is not an object (evaluating 'this.resetStoreCallbacks = []')
-//ERROR Invariant Violation: Module AppRegistry is not a registered callable module (calling runApplication). A frequent cause of the error is that the application entry file path is incorrect.
-//       This can also happen when the JS bundle is corrupt or there is an early initialization error when loading React Native.
-
-const client = ApolloClient({
-  // cache: new InMemoryCache(),
-  link: link,
-});
+import {View, Text, StyleSheet} from 'react-native';
+import {useQuery} from '@apollo/client';
+import {GET_CITY} from './GraphQL/Querie';
 
 export default function App() {
+  const {data} = useQuery(GET_CITY, {
+    variables: {
+      code: 'Ru',
+    },
+
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'network-only',
+  });
+  const capital = data?.country?.capital;
+  const currency = data?.country?.currency;
+  const emoji = data?.country?.emoji;
+  const name = data?.country?.name;
+  const native = data?.country?.native;
+
   return (
-    // <GestureHandlerRootView>
-    //   {/* <Provider>
-    //     <PersistGate loading={null}> */}
-    //       <Navigator />
-    //     {/* </PersistGate>
-    //   </Provider> */}
-    // </GestureHandlerRootView>
-    // <View>
-    //   <Text>fdsioiodsnfdo</Text>
-    // </View>
-    <ApolloProvider client={client}>
-      <GetCity />
-    </ApolloProvider>
-    // <Text>adsasdasd</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Capital {capital}</Text>
+      <Text style={styles.title}>Emoji {emoji}</Text>
+      <Text style={styles.title}>Currency {currency}</Text>
+      <Text style={styles.title}>Name {name}</Text>
+      <Text style={styles.title}>Native {native}</Text>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 24,
+    backgroundColor: '#61dafb',
+  },
+  title: {
+    paddingVertical: 8,
+    borderWidth: 4,
+    borderColor: '#20232a',
+    borderRadius: 6,
+    color: '#20232a',
+    textAlign: 'center',
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+});
