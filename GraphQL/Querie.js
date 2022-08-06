@@ -1,8 +1,8 @@
 import {gql} from '@apollo/client';
 
 export const GET_CITY = gql`
-  query Query {
-    country(code: "AM") {
+  query Query($code: ID!) {
+    country(code: $code) {
       name
       native
       capital
