@@ -1,13 +1,16 @@
 import {gql} from '@apollo/client';
 
 export const GET_CITY = gql`
+  fragment FragmentCity on Country {
+    name
+    native
+    capital
+    emoji
+    currency
+  }
   query Query($code: ID!) {
     country(code: $code) {
-      name
-      native
-      capital
-      emoji
-      currency
+      ...FragmentCity
       languages {
         code
         name
